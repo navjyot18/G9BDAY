@@ -149,25 +149,37 @@ export default function ScrollTriggered() {
 
     useEffect(() => {
         // Auto-play music when component mounts (user already clicked the button)
-        const playMusic = () => {
+        const playMusic = async () => {
             if (audioRef.current && !hasPlayed) {
-                audioRef.current.volume = 0.7
-                
-                // Set the audio to start from 2 minutes 22 seconds (142 seconds)
-                audioRef.current.currentTime = 142
-                
-                const playPromise = audioRef.current.play()
-                
-                if (playPromise !== undefined) {
-                    playPromise
-                        .then(() => {
-                            console.log('Music started playing from 2:22!')
-                            setHasPlayed(true)
-                        })
-                        .catch((error) => {
-                            console.log('Audio play failed:', error)
-                            setShowPlayButton(true)
-                        })
+                try {
+                    // Set audio properties
+                    audioRef.current.volume = 0.7
+                    audioRef.current.currentTime = 142
+                    
+                    // Try to play with user gesture context
+                    const playPromise = audioRef.current.play()
+                    
+                    if (playPromise !== undefined) {
+                        await playPromise
+                        console.log('Music started playing from 2:22!')
+                        setHasPlayed(true)
+                    }
+                } catch (error) {
+                    console.log('Audio play failed:', error)
+                    setShowPlayButton(true)
+                    
+                    // Try again after a short delay
+                    setTimeout(async () => {
+                        try {
+                            if (audioRef.current) {
+                                await audioRef.current.play()
+                                setHasPlayed(true)
+                                setShowPlayButton(false)
+                            }
+                        } catch (retryError) {
+                            console.log('Retry failed:', retryError)
+                        }
+                    }, 1000)
                 }
             }
         }
@@ -184,34 +196,96 @@ export default function ScrollTriggered() {
         }
     }, [hasPlayed])
 
-    const handleManualPlay = () => {
+    const handleManualPlay = async () => {
         if (audioRef.current) {
-            // Set the audio to start from 2 minutes 22 seconds (142 seconds)
-            audioRef.current.currentTime = 142
-            audioRef.current.volume = 0.7
-            
-            audioRef.current.play()
-                .then(() => {
-                    setHasPlayed(true)
-                    setShowPlayButton(false)
-                })
-                .catch((error) => {
-                    console.log('Manual play failed:', error)
-                })
+            try {
+                // Set the audio to start from 2 minutes 22 seconds (142 seconds)
+                audioRef.current.currentTime = 142
+                audioRef.current.volume = 0.7
+                
+                await audioRef.current.play()
+                setHasPlayed(true)
+                setShowPlayButton(false)
+                console.log('Manual play successful!')
+            } catch (error) {
+                console.log('Manual play failed:', error)
+                // Show user-friendly error message
+                alert('Unable to play music. Please check your browser settings and try again.')
+            }
         }
     }
 
     return (
         <div ref={sectionRef} className="scroll-triggered-section">
-            {/* Hidden audio element */}
+            {/* Audio element */}
             <audio
                 ref={audioRef}
                 loop
                 preload="auto"
+                crossOrigin="anonymous"
             >
                 <source src="/Tu Mile Dil Khile Duet Criminal 320 Kbps.mp3" type="audio/mpeg" />
+                <source src="/Tu Mile Dil Khile Duet Criminal 320 Kbps.ogg" type="audio/ogg" />
                 Your browser does not support the audio element.
             </audio>
+
+            {/* Music Control Section */}
+            <div style={{
+                position: 'fixed',
+                top: '20px',
+                right: '20px',
+                zIndex: 1000,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '10px'
+            }}>
+                {!hasPlayed && (
+                    <button
+                        onClick={handleManualPlay}
+                        style={{
+                            background: 'rgba(255, 107, 107, 0.9)',
+                            color: 'white',
+                            padding: '12px 20px',
+                            borderRadius: '25px',
+                            border: 'none',
+                            cursor: 'pointer',
+                            fontFamily: 'Poppins, sans-serif',
+                            fontSize: '1rem',
+                            fontWeight: '600',
+                            boxShadow: '0 4px 15px rgba(255, 107, 107, 0.4)',
+                            backdropFilter: 'blur(10px)',
+                            border: '1px solid rgba(255, 255, 255, 0.3)',
+                            transition: 'all 0.3s ease'
+                        }}
+                        onMouseOver={(e) => {
+                            e.target.style.transform = 'scale(1.05)'
+                            e.target.style.background = 'rgba(255, 107, 107, 1)'
+                        }}
+                        onMouseOut={(e) => {
+                            e.target.style.transform = 'scale(1)'
+                            e.target.style.background = 'rgba(255, 107, 107, 0.9)'
+                        }}
+                    >
+                        🎵 Play Music
+                    </button>
+                )}
+                
+                {hasPlayed && (
+                    <div style={{
+                        background: 'rgba(76, 175, 80, 0.9)',
+                        color: 'white',
+                        padding: '8px 16px',
+                        borderRadius: '20px',
+                        fontFamily: 'Poppins, sans-serif',
+                        fontSize: '0.9rem',
+                        fontWeight: '500',
+                        backdropFilter: 'blur(10px)',
+                        border: '1px solid rgba(255, 255, 255, 0.3)'
+                    }}>
+                        🎶 Music Playing
+                    </div>
+                )}
+            </div>
 
             {/* Fallback play button */}
             {showPlayButton && !hasPlayed && (
