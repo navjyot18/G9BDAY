@@ -34,7 +34,7 @@ const ScrollTriggered: React.FC = () => {
                     spread: 60,
                     origin: { x, y },
                     colors: confettiColors,
-                    shapes: ['heart'],
+                    shapes: ['heart' as any],
                     scalar: 1.2
                 })
             } else if (confettiType < 0.2) {
@@ -123,7 +123,7 @@ const ScrollTriggered: React.FC = () => {
                     spread: 60,
                     origin: { x, y },
                     colors: confettiColors,
-                    shapes: ['heart'],
+                    shapes: ['heart' as any],
                     scalar: 1.3,
                     gravity: 0.3,
                     drift: 0.1

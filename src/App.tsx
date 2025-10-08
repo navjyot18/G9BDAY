@@ -8,9 +8,6 @@ import './App.css'
 import { 
   Hero, 
   LoveMessage, 
-  Memories, 
-  PhotoGallery, 
-  Countdown, 
   Footer,
   ScrollTriggered,
   PinkGlassBackground
