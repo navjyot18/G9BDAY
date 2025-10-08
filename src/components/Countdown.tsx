@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 
-const Countdown = () => {
+const Countdown: React.FC = () => {
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {

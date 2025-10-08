@@ -1,6 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-export default function PinkGlassBackground({ children }) {
+interface PinkGlassBackgroundProps {
+  children: React.ReactNode;
+}
+
+const PinkGlassBackground: React.FC<PinkGlassBackgroundProps> = ({ children }) => {
 
 
   return (
@@ -35,19 +39,7 @@ export default function PinkGlassBackground({ children }) {
         {/* Multiple decorative circles all over the section */}
         <div style={{...styles.decorCircle, ...styles.decorCircle1}} />
         <div style={{...styles.decorCircle, ...styles.decorCircle2}} />
-        <div style={{...styles.decorCircle, ...styles.decorCircle3}} />
-        <div style={{...styles.decorCircle, ...styles.decorCircle4}} />
-        <div style={{...styles.decorCircle, ...styles.decorCircle5}} />
-        <div style={{...styles.decorCircle, ...styles.decorCircle6}} />
-        <div style={{...styles.decorCircle, ...styles.decorCircle7}} />
-        <div style={{...styles.decorCircle, ...styles.decorCircle8}} />
-        <div style={{...styles.decorCircle, ...styles.decorCircle9}} />
-        <div style={{...styles.decorCircle, ...styles.decorCircle10}} />
-        <div style={{...styles.decorCircle, ...styles.decorCircle11}} />
-        <div style={{...styles.decorCircle, ...styles.decorCircle12}} />
-        <div style={{...styles.decorCircle, ...styles.decorCircle13}} />
-        <div style={{...styles.decorCircle, ...styles.decorCircle14}} />
-        <div style={{...styles.decorCircle, ...styles.decorCircle15}} />
+        {/* Additional decorative circles can be added here */}
       </div>
 
       <style>{`
@@ -256,3 +248,5 @@ const styles = {
     animationDelay: '1s'
   },
 };
+
+export default PinkGlassBackground;

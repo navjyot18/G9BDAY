@@ -2,15 +2,21 @@ import { motion } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import confetti from 'canvas-confetti'
 
-export default function ScrollTriggered() {
-    const [hasPlayed, setHasPlayed] = useState(false)
-    const [showPlayButton, setShowPlayButton] = useState(false)
-    const audioRef = useRef(null)
-    const sectionRef = useRef(null)
-    const confettiIntervalRef = useRef(null)
+interface CardProps {
+    emoji: string;
+    bg: string;
+    i: number;
+}
+
+const ScrollTriggered: React.FC = () => {
+    const [hasPlayed, setHasPlayed] = useState<boolean>(false)
+    const [showPlayButton, setShowPlayButton] = useState<boolean>(false)
+    const audioRef = useRef<HTMLAudioElement>(null)
+    const sectionRef = useRef<HTMLDivElement>(null)
+    const confettiIntervalRef = useRef<NodeJS.Timeout | null>(null)
 
     // Infinite confetti function with all types
-    const startInfiniteConfetti = () => {
+    const startInfiniteConfetti = (): void => {
         const confettiColors = ['#ff6b6b', '#ff8e8e', '#ffa8a8', '#ffb3ba', '#ffc0cb', '#ffd1dc', '#ff69b4', '#ff1493', '#ffd700', '#ffa500', '#ff6347', '#ff4757', '#ff3838', '#ff6b9d', '#ff9ff3', '#f368e0', '#ff9f43', '#ff6348', '#ff7675', '#fd79a8']
         
         const createConfettiBurst = () => {
@@ -140,7 +146,7 @@ export default function ScrollTriggered() {
         confettiIntervalRef.current = setInterval(createConfettiBurst, 1500)
     }
 
-    const stopInfiniteConfetti = () => {
+    const stopInfiniteConfetti = (): void => {
         if (confettiIntervalRef.current) {
             clearInterval(confettiIntervalRef.current)
             confettiIntervalRef.current = null
@@ -148,36 +154,45 @@ export default function ScrollTriggered() {
     }
 
     useEffect(() => {
+        console.log('🎪 ScrollTriggered component mounted!')
+        debugger; // Breakpoint here to see component mount
+        
         // Auto-play music when component mounts (user already clicked the button)
         const playMusic = async () => {
+            console.log('🎵 Attempting to play music...')
+            debugger; // Breakpoint here to see music play attempt
+            
             if (audioRef.current && !hasPlayed) {
                 try {
                     // Set audio properties
                     audioRef.current.volume = 0.7
                     audioRef.current.currentTime = 142
+                    console.log('🔊 Audio properties set - volume: 0.7, time: 142s')
                     
                     // Try to play with user gesture context
                     const playPromise = audioRef.current.play()
                     
                     if (playPromise !== undefined) {
                         await playPromise
-                        console.log('Music started playing from 2:22!')
+                        console.log('✅ Music started playing from 2:22!')
                         setHasPlayed(true)
                     }
                 } catch (error) {
-                    console.log('Audio play failed:', error)
+                    console.log('❌ Audio play failed:', error)
                     setShowPlayButton(true)
                     
                     // Try again after a short delay
                     setTimeout(async () => {
                         try {
                             if (audioRef.current) {
+                                console.log('🔄 Retrying music playback...')
                                 await audioRef.current.play()
                                 setHasPlayed(true)
                                 setShowPlayButton(false)
+                                console.log('✅ Retry successful!')
                             }
                         } catch (retryError) {
-                            console.log('Retry failed:', retryError)
+                            console.log('❌ Retry failed:', retryError)
                         }
                     }, 1000)
                 }
@@ -188,30 +203,41 @@ export default function ScrollTriggered() {
         setTimeout(playMusic, 500)
         
         // Start infinite confetti when component mounts
-        setTimeout(startInfiniteConfetti, 1000)
+        setTimeout(() => {
+            console.log('🎉 Starting infinite confetti!')
+            debugger; // Breakpoint here to see confetti start
+            startInfiniteConfetti()
+        }, 1000)
         
         // Cleanup confetti on unmount
         return () => {
+            console.log('🧹 Cleaning up confetti...')
             stopInfiniteConfetti()
         }
     }, [hasPlayed])
 
-    const handleManualPlay = async () => {
+    const handleManualPlay = async (): Promise<void> => {
+        console.log('🎮 Manual play button clicked!')
+        debugger; // Breakpoint here to see manual play
+        
         if (audioRef.current) {
             try {
                 // Set the audio to start from 2 minutes 22 seconds (142 seconds)
                 audioRef.current.currentTime = 142
                 audioRef.current.volume = 0.7
+                console.log('🔊 Manual play - audio properties set')
                 
                 await audioRef.current.play()
                 setHasPlayed(true)
                 setShowPlayButton(false)
-                console.log('Manual play successful!')
+                console.log('✅ Manual play successful!')
             } catch (error) {
-                console.log('Manual play failed:', error)
+                console.log('❌ Manual play failed:', error)
                 // Show user-friendly error message
                 alert('Unable to play music. Please check your browser settings and try again.')
             }
+        } else {
+            console.warn('⚠️ Audio ref is null!')
         }
     }
 
@@ -229,63 +255,6 @@ export default function ScrollTriggered() {
                 Your browser does not support the audio element.
             </audio>
 
-            {/* Music Control Section */}
-            <div style={{
-                position: 'fixed',
-                top: '20px',
-                right: '20px',
-                zIndex: 1000,
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '10px'
-            }}>
-                {!hasPlayed && (
-                    <button
-                        onClick={handleManualPlay}
-                        style={{
-                            background: 'rgba(255, 107, 107, 0.9)',
-                            color: 'white',
-                            padding: '12px 20px',
-                            borderRadius: '25px',
-                            border: 'none',
-                            cursor: 'pointer',
-                            fontFamily: 'Poppins, sans-serif',
-                            fontSize: '1rem',
-                            fontWeight: '600',
-                            boxShadow: '0 4px 15px rgba(255, 107, 107, 0.4)',
-                            backdropFilter: 'blur(10px)',
-                            border: '1px solid rgba(255, 255, 255, 0.3)',
-                            transition: 'all 0.3s ease'
-                        }}
-                        onMouseOver={(e) => {
-                            e.target.style.transform = 'scale(1.05)'
-                            e.target.style.background = 'rgba(255, 107, 107, 1)'
-                        }}
-                        onMouseOut={(e) => {
-                            e.target.style.transform = 'scale(1)'
-                            e.target.style.background = 'rgba(255, 107, 107, 0.9)'
-                        }}
-                    >
-                        🎵 Play Music
-                    </button>
-                )}
-                
-                {hasPlayed && (
-                    <div style={{
-                        background: 'rgba(76, 175, 80, 0.9)',
-                        color: 'white',
-                        padding: '8px 16px',
-                        borderRadius: '20px',
-                        fontFamily: 'Poppins, sans-serif',
-                        fontSize: '0.9rem',
-                        fontWeight: '500',
-                        backdropFilter: 'blur(10px)',
-                        border: '1px solid rgba(255, 255, 255, 0.3)'
-                    }}>
-                        🎶 Music Playing
-                    </div>
-                )}
-            </div>
 
             {/* Fallback play button */}
             {showPlayButton && !hasPlayed && (
@@ -313,16 +282,15 @@ export default function ScrollTriggered() {
 
             {/* Original Card Animation */}
             <div style={container}>
-                {food.map(([emoji, background], i) => (
-                    <Card i={i} emoji={emoji} bg={background} />
+                {food.map(([emoji], i) => (
+                    <Card key={i} i={i} emoji={emoji} bg="" />
                 ))}
             </div>
         </div>
     )
 }
 
-function Card({ emoji, bg ,i }) {
-    const background = bg
+const Card: React.FC<CardProps> = ({ emoji, bg, i }) => {
 
     return (
         <motion.div
@@ -364,7 +332,7 @@ const cardVariants = {
     },
 }
 
-const hue = (h) => `hsl(${h}, 100%, 50%)`
+// const hue = (h: number): string => `hsl(${h}, 100%, 50%)`
 
 /**
  * ==============   Styles   ================
@@ -414,15 +382,17 @@ const card = {
  * ==============   Data   ================
  */
 
-const food = [
-    ["/WhatsApp Image 2025-10-06 at 9.50.34 PM.jpeg", 340, 10],
+const food: [string, number, number][] = [
+    //["/WhatsApp Image 2025-10-06 at 9.50.34 PM.jpeg", 340, 10],
     ["/WhatsApp Image 2025-10-06 at 9.50.34 PM (1).jpeg", 20, 40],
-    ["/WhatsApp Image 2025-10-06 at 9.50.34 PM (2).jpeg", 60, 90],
+    //["/WhatsApp Image 2025-10-06 at 9.50.34 PM (2).jpeg", 60, 90],
     ["/WhatsApp Image 2025-10-06 at 9.50.34 PM (3).jpeg", 80, 120],
     ["/WhatsApp Image 2025-10-06 at 9.50.34 PM (4).jpeg", 100, 140],
     ["/WhatsApp Image 2025-10-06 at 9.50.34 PM (5).jpeg", 205, 245],
     ["/WhatsApp Image 2025-10-06 at 9.50.34 PM (6).jpeg", 260, 290],
     ["/WhatsApp Image 2025-10-06 at 9.50.34 PM (7).jpeg", 290, 320],
     ["/WhatsApp Image 2025-10-06 at 9.50.34 PM (8).jpeg", 320, 350],
-    ["/WhatsApp Image 2025-10-06 at 9.50.34 PM (9).jpeg", 350, 380],
+    //["/WhatsApp Image 2025-10-06 at 9.50.34 PM (9).jpeg", 350, 380],
 ]
+
+export default ScrollTriggered

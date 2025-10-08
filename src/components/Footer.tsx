@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 
-const Footer = () => {
+const Footer: React.FC = () => {
   return (
     <motion.footer 
       className="footer"

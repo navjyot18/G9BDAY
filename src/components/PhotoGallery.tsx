@@ -6,9 +6,16 @@ import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import 'swiper/css/effect-fade'
 
-const PhotoGallery = () => {
+interface ImageData {
+  id: number;
+  src: string;
+  alt: string;
+  caption: string;
+}
+
+const PhotoGallery: React.FC = () => {
   // Sample images - replace with your actual images
-  const favoriteImages = [
+  const favoriteImages: ImageData[] = [
     {
       id: 1,
       src: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=500&h=600&fit=crop&crop=face",
@@ -71,39 +78,40 @@ const PhotoGallery = () => {
     }
   }
 
-  const cardVariants = {
-    offscreen: {
-      y: 100,
-      opacity: 0,
-      scale: 0.9
-    },
-    onscreen: {
-      y: 0,
-      opacity: 1,
-      scale: 1,
-      transition: {
-        type: "spring",
-        bounce: 0.3,
-        duration: 0.6,
-      },
-    },
-  }
+  // Animation variants for future use
+  // const cardVariants = {
+  //   offscreen: {
+  //     y: 100,
+  //     opacity: 0,
+  //     scale: 0.9
+  //   },
+  //   onscreen: {
+  //     y: 0,
+  //     opacity: 1,
+  //     scale: 1,
+  //     transition: {
+  //       type: "spring",
+  //       bounce: 0.3,
+  //       duration: 0.6,
+  //     },
+  //   },
+  // }
 
-  const imageVariants = {
-    offscreen: {
-      scale: 0.9,
-      opacity: 0
-    },
-    onscreen: {
-      scale: 1,
-      opacity: 1,
-      transition: {
-        type: "spring",
-        bounce: 0.2,
-        duration: 0.5,
-      },
-    },
-  }
+  // const imageVariants = {
+  //   offscreen: {
+  //     scale: 0.9,
+  //     opacity: 0
+  //   },
+  //   onscreen: {
+  //     scale: 1,
+  //     opacity: 1,
+  //     transition: {
+  //       type: "spring",
+  //       bounce: 0.2,
+  //       duration: 0.5,
+  //     },
+  //   },
+  // }
 
   return (
     <motion.section 

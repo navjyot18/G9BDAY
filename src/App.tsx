@@ -16,10 +16,13 @@ import {
   PinkGlassBackground
 } from './components'
 
-function App() {
-  const [showMusicSection, setShowMusicSection] = useState(false)
+const App: React.FC = () => {
+  const [showMusicSection, setShowMusicSection] = useState<boolean>(false)
 
   useEffect(() => {
+    console.log('🎂 App component mounted!')
+    debugger; // Breakpoint here to see app initialization
+    
     // Initialize AOS
     AOS.init({
       duration: 1000,
@@ -27,6 +30,8 @@ function App() {
       once: true,
       offset: 100
     })
+    
+    console.log('✨ AOS initialized successfully')
   }, [])
 
   // Animation variants
@@ -46,13 +51,21 @@ function App() {
     console.log('Hearts clicked! 💕')
   }
 
-  const handleMusicButtonClick = () => {
+  const handleMusicButtonClick = (): void => {
+    console.log('🎵 Music button clicked!')
+    debugger; // Breakpoint here to see button click
+    
     setShowMusicSection(true)
+    console.log('🎶 showMusicSection set to true')
+    
     // Scroll to the music section after a short delay
     setTimeout(() => {
       const musicSection = document.querySelector('.scroll-triggered-section')
       if (musicSection) {
+        console.log('📍 Scrolling to music section')
         musicSection.scrollIntoView({ behavior: 'smooth' })
+      } else {
+        console.warn('⚠️ Music section not found!')
       }
     }, 100)
   }

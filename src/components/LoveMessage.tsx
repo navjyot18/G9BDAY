@@ -1,30 +1,21 @@
 import { motion } from 'framer-motion'
 import { useState, useEffect } from 'react'
 
-const LoveMessage = () => {
-  const [currentLine, setCurrentLine] = useState(0)
-  const [isTyping, setIsTyping] = useState(true)
+const LoveMessage: React.FC = () => {
+  const [currentLine, setCurrentLine] = useState<number>(0)
+  const [isTyping, setIsTyping] = useState<boolean>(true)
 
   const letterContent = [
-    "My Dearest Gaavrani barbie,",
-    "",
+    "My Dearest barbie,",
     "As I sit here writing this letter on three days before your special day, my heart is overflowing with emotions that words can barely capture. Today marks another year of your incredible journey.",
-    "",
-    "",
     "This birthday is still special for me, even though you are miles away. I just want to let you know that you will always be in my dreams, even after thousands of arguments. You are the reason I believe in magic, the reason I go to sleep smiling and wake up with a smile.",
-    "",
     "Every day with you feels like a celebration(where rollercoaster is silent). ",
-    "",
     "I am pretty sure that this birthday will bring you a sexy job. Even though I get mad at you multiple times regarding studies, that is purely because I care for you & I love you, and I can not see you struggling.",
-    "",
     "May your dreams soar higher than ever, and may you always know how incredibly special you are.",
-    "",
     "I promise to love you through every season and support you in every dream. You are my greatest adventure, my favorite story, and my forever home.",
-    "",
     "Happy Birthday, my love. Today and always, you are the most gaandfaad thing ever happened to me.",
-    "",
     "With all my heart & money & soul,",
-    "Tujhaaa aho!💕"
+    "At your service!💕"
   ]
 
   useEffect(() => {
