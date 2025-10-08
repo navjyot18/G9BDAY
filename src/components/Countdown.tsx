@@ -53,7 +53,7 @@ const Countdown: React.FC = () => {
     >
       <div className="container">
         <motion.h2
-          variants={itemVariants}
+          variants={itemVariants as any}
           whileHover={{ scale: 1.05 }}
           transition={{ type: "spring", stiffness: 300 }}
         >
