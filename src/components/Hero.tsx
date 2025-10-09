@@ -2,9 +2,13 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import confetti from 'canvas-confetti'
 
-const Hero = ({ onHeartClick }) => {
-  const [currentTime, setCurrentTime] = useState(new Date())
-  const [showHearts, setShowHearts] = useState(false)
+interface HeroProps {
+  onHeartClick: () => void;
+}
+
+const Hero: React.FC<HeroProps> = ({ onHeartClick }) => {
+  const [currentTime, setCurrentTime] = useState<Date>(new Date())
+  const [showHearts, setShowHearts] = useState<boolean>(false)
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -14,16 +18,16 @@ const Hero = ({ onHeartClick }) => {
     return () => clearInterval(timer)
   }, [])
 
-  const formatTime = (date) => {
-    return date.toLocaleTimeString('en-US', {
-      hour12: true,
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit'
-    })
-  }
+  // const formatTime = (date: Date): string => {
+  //   return date.toLocaleTimeString('en-US', {
+  //     hour12: true,
+  //     hour: '2-digit',
+  //     minute: '2-digit',
+  //     second: '2-digit'
+  //   })
+  // }
 
-  const formatDate = (date) => {
+  const formatDate = (date: Date): string => {
     return date.toLocaleDateString('en-US', {
       weekday: 'long',
       year: 'numeric',
@@ -119,7 +123,9 @@ const Hero = ({ onHeartClick }) => {
     }, 400)
   }
 
-  const createHeart = () => {
+  const createHeart = (): void => {
+    console.log('💕 Heart button clicked!')
+    debugger; // Breakpoint here to see heart click
     triggerConfetti() // Add confetti to heart click
   }
 

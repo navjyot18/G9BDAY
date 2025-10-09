@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 
-const Countdown = () => {
+const Countdown: React.FC = () => {
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -53,7 +53,7 @@ const Countdown = () => {
     >
       <div className="container">
         <motion.h2
-          variants={itemVariants}
+          variants={itemVariants as any}
           whileHover={{ scale: 1.05 }}
           transition={{ type: "spring", stiffness: 300 }}
         >

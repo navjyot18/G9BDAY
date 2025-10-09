@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 
-const Memories = () => {
+const Memories: React.FC = () => {
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
